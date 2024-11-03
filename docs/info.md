@@ -9,7 +9,7 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Decimation filter used to reduce the sample frequency of an ADC by a factor of 16.
+Decimation filter used to reduce the sample frequency of an incremental and a regular Delta-Sigma Modulator by a factor of 16.
 
 Input: 1 bit
 Output: 16 bits
