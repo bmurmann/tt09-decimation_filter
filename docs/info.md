@@ -9,12 +9,23 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
+Decimation filter used to reduce sample frequency by a factor of 16.
+
+Input: 1 bit
+Output: 16 bits
+
+Connect an ADC with a 1 bit output 
+After oversampling, the output of a Delta-Sigma modulator is at a much higher data rate than necessary. The decimation filter not only removes unwanted high-frequency noise but also reduces the data rate, making the ADC’s output usable for further processing.
+
+Decimaiton filter removes high-frequency quantization noise introduced during oversampling. As well as reduces the sampling rate by downsampling the data, making it easier to handle and process while maintaining signal integrity.
+
+Without the decimation filter, the oversampled output of the Delta-Sigma ADC would have too much noise and an unnecessarily high data rate, making it inefficient and difficult to process further.
+
 
 ## How to test
 
-Explain how to use your project
+Connect an ADC with a 1 bit output and get the 16 bit output
 
 ## External hardware
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+Incremental Delta Sigma ADC
