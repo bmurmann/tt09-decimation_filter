@@ -16,6 +16,10 @@ module tt_um_murmann_group (input  wire [7:0] ui_in,    // Dedicated inputs
     // List all unused inputs to prevent warnings
     wire _unused = &{ui_in[7:2],ena,1'b0};
 
+	// Declare wires
+	wire X;
+	wire type_dec;
+
   	// ADC 1 bit inpput
     assign X = ui_in[0];
   	// Type of decimation (incremental or regular delta-digma modulator)
