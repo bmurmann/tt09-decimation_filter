@@ -88,9 +88,8 @@ module decimation_filter
     end
 
     always @(posedge clk) begin
-        $display("Time %0t: reset = %b, type_dec = %b, X = %b, input_accumulator = %d, Y = %d, decimation_count = %d, Output = %d", 
-                 $time, reset, type_dec, X, input_accumulator, Y, decimation_count, Z);
-        $display("Prev reset = %b", reset_d);
+	// $display("Time %0t: reset = %b, type_dec = %b, X = %b, input_accumulator = %d, Y = %d, decimation_count = %d, Output = %d", $time, reset, type_dec, X, input_accumulator, Y, decimation_count, Z);
+        // $display("Prev reset = %b", reset_d);
         
         // Detect positive edge of reset
         if ((reset && !reset_d) || (type_dec_d ^ type_dec)) begin
