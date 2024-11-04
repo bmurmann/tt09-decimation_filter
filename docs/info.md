@@ -7,59 +7,56 @@ You can also include images in this folder and reference them in the markdown. E
 512 kb in size, and the combined size of all images must be less than 1 MB.
 -->
 
-## How it works
+Here’s an improved version for clarity and conciseness:
 
-Decimation filter used to reduce the sample frequency of an incremental and a regular Delta-Sigma Modulator by a factor of 16.
+---
+### Overview
+The decimation filter reduces the sample frequency of both **Incremental** and **Regular Delta-Sigma Modulators (DSMs)** by a factor of 16. It removes high-frequency noise and downsamples data, enabling efficient and accurate signal processing from oversampled ADC outputs.
 
-Input: 2 bit
-  * **Input 1**: ADC input bit
-  * **Input 2**: Decimation mode
-Output: 16 bits
-  * **Dedicated output pins**: Most significant 8 bits
-  * **General-purpose IO pins**: Less significant 8 bits
+### Specifications
+- **Input:** 2 bits
+  - **Input 1:** 1-bit ADC data input
+  - **Input 2:** Decimation mode selection
+- **Output:** 16 bits
+  - **Most Significant 8 bits:** Dedicated output pins
+  - **Least Significant 8 bits:** General-purpose IO pins
+- **Clock Frequency:** 50 MHz
 
-Put mode for decimation according
-  * **Incremental DSM**: Input 2 low
-  * **Regulat DSM**: Input 2 high
+### Mode Selection
+Set the decimation mode according to the ADC type:
+- **Incremental DSM:** Set Input 2 low.
+- **Regular DSM:** Set Input 2 high.
 
-Clock is set to 50MHz
+### How It Works
+1. **Noise Reduction and Downsampling:** The decimation filter removes high-frequency quantization noise introduced by oversampling in Delta-Sigma Modulators, reducing the output data rate while retaining signal quality.
+2. **Adaptive Output Rate:**
+   - **Incremental DSM (Input 2 Low):** Output updates every 16 input bits from the ADC.
+   - **Regular DSM (Input 2 High):** Output updates each time the reset signal is triggered.
+3. **Output Simplification:** Converts the ADC’s oversampled high data rate into a manageable, downsampled rate, maintaining signal integrity and reducing processing complexity.
 
-Connect an ADC with a 1 bit output 
-After oversampling, the output of a Delta-Sigma modulator is at a much higher data rate than necessary. The decimation filter not only removes unwanted high-frequency noise but also reduces the data rate, making the ADC’s output usable for further processing.
+### Operation
+1. **Incremental DSM Mode (Input 2 Low):** 
+   - Use the ADC’s oversample frequency as the filter input clock.
+   - Set the reset input to the desired decimation frequency.
+   - For example, with an ADC frequency of 50 MHz and a target decimation frequency of 25 MHz, configure a reset frequency of 25 MHz (decimation factor: 2).
 
-Decimaiton filter removes high-frequency quantization noise introduced during oversampling. As well as reduces the sampling rate by downsampling the data, making it easier to handle and process while maintaining signal integrity.
+2. **Regular DSM Mode (Input 2 High):**
+   - Set the decimation factor to 16 by configuring the reset frequency to change every 16 cycles.
+   - For custom decimation factors, follow the configuration steps for Incremental DSM mode.
 
-Without the decimation filter, the oversampled output of the Delta-Sigma ADC would have too much noise and an unnecessarily high data rate, making it inefficient and difficult to process further.
+### Testing Procedure
+1. **Hardware Setup:**
+   - Connect a 1-bit ADC output to Input 1.
+   - Configure Input 2 for Incremental (low) or Regular DSM (high) mode.
+2. **Verification:**
+   - **Incremental DSM:** Set Input 2 low, connect a clock to the reset pin, and observe the decimated output at the specified frequency.
+   - **Regular DSM:** Set Input 2 high and monitor output changes in line with the reset signal to confirm a 16x decimation.
 
-With the decimation filter you are able to take your ADC oversample frequency to a lower frequency.
+### Output Configuration
+The decimation filter provides a 16-bit output:
+- **Most Significant 8 Bits:** Routed to dedicated output pins.
+- **Least Significant 8 Bits:** Routed to general-purpose IO pins.
 
-When ADC is an incremental delta-sigma modulator, there is a 16 decimation factor. Meaning that the output changes every 16 input bits from the ADC.
-When ADC is a regular delta-sigma modulator, output changes every time the reset button is set to high. 
-
-## How to test
-Connect an ADC with a 1 bit output to input 1.
-Put mode for decimation according
-  * **Incremental DSM**: Input 2 low
-  * **Regulat DSM**: Input 2 high
-
-#### Incremental DSM
-Select type 1 by setting input 2 low
-Connect a clock to the reset input of the decimation filter with the desired decimated frequency.
-
-Ex: ADC oversample frequency: 50MHz
-    Desired decimated frequency: 25MHz
-    Reset frequency: 25MHz
-    Decimation factor: 2
-
-#### Regular DSM
-Select type 2 by setting input 2 high
-The decimation factor for a regular ADC is set to 16
-If wanting to do a different decimation factor follow the steps for an incremental DSM
-
-Get 16 bit output where
-  * **Most significant 8 bits**: Dedicated output pins
-  * **Less significant 8 bits**: General-purpose IO pins
-
-## External hardware
-
-Incremental or Regular Delta Sigma Modulator ADC
+### External Requirements
+The filter is compatible with:
+- **Incremental or Regular Delta-Sigma Modulator ADCs** (1-bit output). 
