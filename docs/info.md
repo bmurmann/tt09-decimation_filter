@@ -41,7 +41,7 @@ Set the decimation mode according to the ADC type:
    - For example, with an ADC frequency of 50 MHz and a target decimation frequency of 25 MHz, configure a reset frequency of 25 MHz (decimation factor: 2).
 
 2. **Regular DSM Mode (Input 2 High):**
-   - Set the decimation factor to 16 by configuring the reset frequency to change every 16 cycles.
+   - Decimation factor is set to 16.
    - For custom decimation factors, follow the configuration steps for Incremental DSM mode.
 
 ### Testing Procedure
