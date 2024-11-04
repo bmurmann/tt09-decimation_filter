@@ -12,16 +12,15 @@ You can also include images in this folder and reference them in the markdown. E
 Decimation filter used to reduce the sample frequency of an incremental and a regular Delta-Sigma Modulator by a factor of 16.
 
 Input: 2 bit
-  * Input 1: ADC input bit
-  * Input 2: Decimation mode
+  * **Input 1**: ADC input bit
+  * **Input 2**: Decimation mode
 Output: 16 bits
-  * Dedicated output pins: Most significant 8 bits
-  * General-purpose IO pins: Less significant 8 bits
+  * **Dedicated output pins**: Most significant 8 bits
+  * **General-purpose IO pins**: Less significant 8 bits
 
 Put mode for decimation according
-  * Incremental DSM (type 1): Input 2 low
-  * Regulat DSM (type 2) Input 2 high
-  * 
+  * **Incremental DSM**: Input 2 low
+  * **Regulat DSM**: Input 2 high
 
 Clock is set to 50MHz
 
@@ -40,12 +39,13 @@ When ADC is a regular delta-sigma modulator, output changes every time the reset
 ## How to test
 Connect an ADC with a 1 bit output to input 1.
 Put mode for decimation according
-  * Incremental DSM (type 1): Input 2 low
-  * Regulat DSM (type 2) Input 2 high
+  * **Incremental DSM**: Input 2 low
+  * **Regulat DSM**: Input 2 high
 
 #### Incremental DSM
 Select type 1 by setting input 2 low
 Connect a clock to the reset input of the decimation filter with the desired decimated frequency.
+
 Ex: ADC oversample frequency: 50MHz
     Desired decimated frequency: 25MHz
     Reset frequency: 25MHz
@@ -57,8 +57,8 @@ The decimation factor for a regular ADC is set to 16
 If wanting to do a different decimation factor follow the steps for an incremental DSM
 
 Get 16 bit output where
-  * Most significant 8 bits: Dedicated output pins
-  * Less significant 8 bits: General-purpose IO pins
+  * **Most significant 8 bits**: Dedicated output pins
+  * **Less significant 8 bits**: General-purpose IO pins
 
 ## External hardware
 
