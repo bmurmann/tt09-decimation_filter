@@ -7,64 +7,68 @@ from cocotb.triggers import ClockCycles, RisingEdge
 
 @cocotb.test()
 async def test_tt_um_murmann_group(dut):
-    dut._log.info("Start test for tt_um_murmann_group")
+    dut._log.info("Starting test for tt_um_murmann_group")
 
     # Clock setup (50 MHz)
-    clock = Clock(dut.clk, 5, units="ns")  # 50 MHz -> 5 ns period
+    clock = Clock(dut.clk, 10, units="ns")  # 50 MHz clock -> 10 ns period
     cocotb.start_soon(clock.start())
 
     # Initialize signals
     dut.ui_in.value = 0
     dut.uio_in.value = 0
     dut.ena.value = 1
-    dut.rst_n.value = 0  # Reset initially low
+    dut.rst_n.value = 0  # Initially apply reset
 
-    # Apply reset and release after 20 clock cycles
+    # Apply reset and release after 2 clock cycles
     await ClockCycles(dut.clk, 2)
     dut.rst_n.value = 1
-    dut._log.info("Release reset")
+    dut._log.info("Released main reset")
+
+    # Apply global reset at t=0 using ui_in[2]
+    dut.ui_in[2].value = 1
+    await ClockCycles(dut.clk, 1)
+    dut.ui_in[2].value = 0  # Release global reset
+    dut._log.info("Released global reset")
 
     # Type 1 Decimation (incremental DSM mode)
-    dut._log.info("Testing Type 1 Decimation")
-    dut.ui_in[1].value = 0  # Type 1 mode
+    dut._log.info("Testing Type 1 Decimation (Incremental DSM)")
+    dut.ui_in[1].value = 0  # Set to Type 1 mode
     for i in range(32):
-        # Toggle ADC input every 10ns
         await ClockCycles(dut.clk, 1)
-        dut.ui_in[0].value = not dut.ui_in[0].value
-        # Apply reset at specific times (11 and 25 cycles)
+        dut.ui_in[0].value = not dut.ui_in[0].value  # Toggle ADC input
+
+        # Apply main reset at specific cycles (simulate reset pulses)
         if i == 11 or i == 25:
-            dut._log.info(f"Resetting at cycle {i}")
+            dut._log.info(f"Asserting main reset at cycle {i}")
             dut.rst_n.value = 0
-            await ClockCycles(dut.clk, 2)  # Hold reset for 2 cycles
+            await ClockCycles(dut.clk, 2)
             dut.rst_n.value = 1
 
-
-        if  i == 12:
+        # Check expected output at specific cycles
+        if i == 12:
             expected_output = 30
-            output_string = f'{dut.uo_out.value}' + f'{dut.uio_out.value}'
-            actual_output = int(output_string,2)
-            assert actual_output == expected_output, f"Unexpected output {actual_output} (expected {expected_output})"
-
-        if  i == 26:
+            output_value = int(dut.uo_out.value) << 8 | int(dut.uio_out.value)
+            assert output_value == expected_output, f"Unexpected output {output_value} (expected {expected_output})"
+        
+        if i == 26:
             expected_output = 42
-            output_string = f'{dut.uo_out.value}' + f'{dut.uio_out.value}'
-            actual_output = int(output_string,2)
-            assert actual_output == expected_output, f"Unexpected output {actual_output} (expected {expected_output})"
+            output_value = int(dut.uo_out.value) << 8 | int(dut.uio_out.value)
+            assert output_value == expected_output, f"Unexpected output {output_value} (expected {expected_output})"
 
-    # Delay for decimation to complete
+    # Delay to let decimation process complete
     await ClockCycles(dut.clk, 10)
 
     # Type 2 Decimation (regular DSM mode)
-    dut._log.info("Testing Type 2 Decimation")
-    dut.ui_in[1].value = 1  # Type 2 mode
+    dut._log.info("Testing Type 2 Decimation (Regular DSM)")
+    dut.ui_in[1].value = 1  # Set to Type 2 mode
     for i in range(64):
         await ClockCycles(dut.clk, 1)
-        dut.ui_in[0].value = not dut.ui_in[0].value
+        dut.ui_in[0].value = not dut.ui_in[0].value  # Toggle ADC input
+
         if i == 45:
             expected_output = 56
-            output_string = bin(dut.uo_out.value)[2:] + bin(dut.uio_out.value)[2:]
-            actual_output = int(output_string,2)
-            assert actual_output == expected_output, f"Unexpected output {actual_output} (expected {expected_output})"
+            output_value = int(dut.uo_out.value) << 8 | int(dut.uio_out.value)
+            assert output_value == expected_output, f"Unexpected output {output_value} (expected {expected_output})"
 
     # Wait for output to settle
     await ClockCycles(dut.clk, 10)
