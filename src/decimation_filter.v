@@ -86,7 +86,7 @@ module decimation_filter
     // Previous decimation type to reset if it changes
     reg type_dec_d;
 
-    always @(posedge clk or posedge reset) begin
+    always @(posedge clk) begin
         if (global_reset) begin
             // Global initialization at t=0
             input_accumulator <= 0;
