@@ -24,7 +24,7 @@ pinout:
   # Inputs
   ui[0]: X
   ui[1]: type_dec
-  ui[2]: ""
+  ui[2]: global_reset
   ui[3]: ""
   ui[4]: ""
   ui[5]: ""
