@@ -120,7 +120,7 @@ module decimation_filter
             end else begin
                 $display("X = %b", X);
                 // Integrator stage (accumulate input samples)
-                input_accumulator <= input_accumulator + X;
+                input_accumulator <= input_accumulator + {15'b0, X};
                 Y <= Y + input_accumulator;
 
                 $display("input_accumulator = %d, Y = %d, decimation_count = %d", input_accumulator, Y, decimation_count);
