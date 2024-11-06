@@ -15,7 +15,7 @@ module tt_um_murmann_group (
 );
 
     // Prevent warnings for unused inputs
-    wire _unused = &{ui_in[7:3], uio_in[7:3], ena, 1'b0};
+    wire _unused = &{ui_in[7:3], uio_in[7:0], ena, 1'b0};
 
     // Declare wires
     wire X;
