@@ -100,12 +100,9 @@ module decimation_filter
         end else begin
             // Detect positive edge of reset or type change
             if ((reset && !reset_d) || (type_dec_d ^ type_dec)) begin
-                $display("Edge Reset ON");
-
                 if ((type_dec_d ^ type_dec) || type_dec) begin
                     Z <= 0;
                 end else begin
-                    $display("Sending Output for type_dec %b", type_dec);
                     // Type 1: Incremental DSM, output when reset is active
                     Z <= Y;
                 end
@@ -118,12 +115,9 @@ module decimation_filter
                 decimation_count <= 0;
 
             end else begin
-                $display("X = %b", X);
                 // Integrator stage (accumulate input samples)
                 input_accumulator <= input_accumulator + {15'b0, X};
                 Y <= Y + input_accumulator;
-
-                $display("input_accumulator = %d, Y = %d, decimation_count = %d", input_accumulator, Y, decimation_count);
 
                 // Decimation control based on type
                 if (type_dec) begin
@@ -133,7 +127,6 @@ module decimation_filter
                         comb_1 <= Y;
                         comb_2 <= comb_1;
                         Z <= comb_1 - comb_2;
-                        $display("comb1 = %d, comb2 = %d", comb_1, comb_2);
 
                         // Reset integrators and decimation counter
                         input_accumulator <= 0;
