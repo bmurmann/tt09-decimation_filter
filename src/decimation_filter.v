@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Andrea Murillo Martinez & Jaeden Chang
+ * Copyright (c) 2024 Andrea Murillo Martinez & Jaeden Chang, BM
  * SPDX-License-Identifier: Apache-2.0
  */
 
